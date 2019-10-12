@@ -1,0 +1,312 @@
+The basic idea is that rather than enumerating all possible variations
+of box-drawing characters, we can combine the basic elements of box-
+drawing characters to draw boxes. If we were to look at the box-drawing
+characters provided by the unicode there are 5 possible 'thickness' of
+the lines (none, dashed, thin, thick, double), with 4 possible cardinal
+directions. If all possible combinations were encoded, we'd have to
+reserved 5^4 different box-drawing characters. Instead, this is a propoal
+to decompose the box-drawing characters into their constituent parts,
+and then allow them to be recombined.
+
+One particular issue in in combining box-drawing characters to get "good
+looking" combination. Consider combining double-line right-horizontal with
+a lower vertical single line:
+
+      0 1 2 3 4 6 7 8     0 1 2 3 4 6 7 8
+    0                    0
+    1                    1
+    2                    2
+    3       -------      3
+    4                    4
+    5       -------      5      |
+    6                    6      |
+    7                    7      |
+    8                    8      |
+
+Naively, we'd get a 'nonoverlap' at the top of the double-line:
+
+      0 1 2 3 4 6 7 8
+    0
+    1
+    2
+    3       -------
+    4
+    5       +------
+    6       |
+    7       |
+    8       |
+
+We could try to 'overextend' the vertical line:
+
+     0 1 2 3 4 6 7 8
+    0
+    1
+    2
+    3      |
+    4      |
+    5      |
+    6      |
+    7      |
+    8      |
+
+But if we combined the thin vertical with thin horizontal, it would
+now overshoot.
+
+The effect is that some care would be needed in creating 'ligatures':
+either we'd have to accept the artifacts of 'short' combining (preferable),
+or we'd need to consider all such ligatures with custom rendering.
+
+OFFSET                    : 0000
+NAME                      : BOX DRAWING COMBINING FIELD
+GENERAL CATEGORY          : Zs
+CANONICAL COMBINING CLASS : 0
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0001
+NAME                      : BOX DRAWING COMBINING LEFT DASHED
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0002
+NAME                      : BOX DRAWING COMBINING RIGHT DASHED
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0003
+NAME                      : BOX DRAWING COMBINING TOP DASHED
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0004
+NAME                      : BOX DRAWING COMBINING BOT DASHED
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0005
+NAME                      : BOX DRAWING COMBINING LEFT THIN
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0006
+NAME                      : BOX DRAWING COMBINING RIGHT THIN
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0007
+NAME                      : BOX DRAWING COMBINING TOP THIN
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0008
+NAME                      : BOX DRAWING COMBINING BOT THIN
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0009
+NAME                      : BOX DRAWING COMBINING LEFT THICK
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0010
+NAME                      : BOX DRAWING COMBINING RIGHT THICK
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0011
+NAME                      : BOX DRAWING COMBINING TOP THICK
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0012
+NAME                      : BOX DRAWING COMBINING BOT THICK
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0013
+NAME                      : BOX DRAWING COMBINING LEFT DOUBLE
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0014
+NAME                      : BOX DRAWING COMBINING RIGHT DOUBLE
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0015
+NAME                      : BOX DRAWING COMBINING TOP DOUBLE
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
+
+OFFSET                    : 0016
+NAME                      : BOX DRAWING COMBINING BOT DOUBLE
+GENERAL CATEGORY          : Mn
+CANONICAL COMBINING CLASS : 1
+BIDIRECTIONAL CLASS       : NSM
+DECOMPOSITION TYPE        :
+NUMERIC TYPE              :
+NUMERIC VALUE             :
+BIDI MIRRORED             :
+UNICODE 1 NAME            :
+ISO COMMENT               :
+SIMPLE UPPERCASE MAPPING  :
+SIMPLE LOWERCASE MAPPING  :
+SIMPLE TITLECASE MAPPING  :
