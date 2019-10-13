@@ -72,6 +72,19 @@ struct BDCStr
 int bdMeasureText(BDCellData* text, int cellWidth);
 signed long bdGetTextEntry(BDCellData* cellData, int cellWidth, int row, int col);
 
+struct BDASCIISizedCell
+{
+    int         col;
+    int         row;
+    int         colSpan;
+    int         rowSpan;
+    int         minWidth;
+    int         minHeight;
+    const char* text;
+};
+
+char* bdDrawASCIITable(int numCells, BDASCIISizedCell* cells, int maxTotalWidth);
+
 #ifdef  __cplusplus
 }//end extern "C".
 #endif//__cplusplus
@@ -417,10 +430,105 @@ char* bdRenderTable(BDLayoutInfo* info, BDLayout& layout)
 
 char* bdDrawTable(BDLayoutInfo* info)
 {
+    if (!info->numRows)
+    {
+        return 0;
+    }
+    if (!info->numCols)
+    {
+        return 0;
+    }
+    if (!info->numCells)
+    {
+        return 0;
+    }
+    if (info->maxTotalWidth < 3)
+    {
+        return 0;
+    }
+    if (!info->rowSizes)
+    {
+        return 0;
+    }
+    if (!info->colSizes)
+    {
+        return 0;
+    }
+    if (!info->cells)
+    {
+        return 0;
+    }
+    if (!info->measureText)
+    {
+        return 0;
+    }
+    if (!info->getTextEntry)
+    {
+        return 0;
+    }
+
     BDLayout layout = bdLayoutCells(info);
 
     char* buffer    = bdRenderTable(info, layout);
 
+    return buffer;
+}
+
+char* bdDrawASCIITable(int numCells, BDASCIISizedCell* cells, int maxTotalWidth)
+{
+    BDCell *bdcells         = (BDCell*)calloc(sizeof(BDCell), numCells);
+    BDCStr* cStrs           = (BDCStr*)calloc(sizeof(BDCStr), numCells);
+
+    char* buffer            = nullptr;
+
+    std::vector<int> colSizes;
+    std::vector<int> rowSizes;
+
+    for (int EE = 0; EE < numCells; ++EE)
+    {
+        cStrs[EE].begin         = cells[EE].text;
+        cStrs[EE].end           = cells[EE].text + strlen(cells[EE].text);
+        bdcells[EE].col         = cells[EE].col;
+        bdcells[EE].row         = cells[EE].row;
+        bdcells[EE].colSpan     = std::max(1, cells[EE].colSpan);
+        bdcells[EE].rowSpan     = std::max(1, cells[EE].rowSpan);
+        bdcells[EE].cellData.userData = &cStrs[EE];
+
+        colSizes.resize(std::max<std::size_t>(colSizes.size(), bdcells[EE].col + bdcells[EE].colSpan));
+        rowSizes.resize(std::max<std::size_t>(rowSizes.size(), bdcells[EE].row + bdcells[EE].rowSpan));
+
+        if (bdcells[EE].colSpan == 1)
+        {
+            colSizes[bdcells[EE].col]   = std::max(colSizes[bdcells[EE].col], cells[EE].minWidth);
+        }
+
+        if (bdcells[EE].rowSpan == 1)
+        {
+            rowSizes[bdcells[EE].row]   = cells[EE].minHeight;
+        }
+    }
+
+    BDLayoutInfo bag            =
+    {
+        .numCols                = (int)colSizes.size(),
+        .numRows                = (int)rowSizes.size(),
+        .numCells               = numCells,
+        .maxTotalWidth          = maxTotalWidth,
+        .borderCollapse         = 1,
+        .border                 = { BD_THIN, BD_THIN, BD_THIN, BD_THIN },
+        .padding                = { 0, 0, 0, 0, },
+        .margin                 = { 0, 0, 0, 0, },
+        .colSizes               = &colSizes[0],
+        .rowSizes               = &rowSizes[0],
+        .cells                  = bdcells,
+        .measureText            = &bdMeasureText,
+        .getTextEntry           = &bdGetTextEntry,
+    };
+
+    buffer  = bdDrawTable(&bag);
+
+    free(bdcells);
+    free(cStrs);
     return buffer;
 }
 
